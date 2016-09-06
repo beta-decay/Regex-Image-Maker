@@ -5,7 +5,7 @@
 	<body>
 		<h1>Regex Image Maker</h1>
 		<h3>Based on <a href="http://christianp.github.io/regex-fractals">Regex Fractals</a></h3>
-		This works by using a regular expression to match the coordinates of each pixel in the 200 by 200 image below.
+		This works by using two regular expressions to match the coordinates of each pixel in the 200 by 200 image below.
 		<br/>
 		<table>
 			<tr>
@@ -20,14 +20,15 @@
 			</tr>
 		</table>
 		<br/><br/>
-		Regex: <input id="regex"><br/>
-		Check: regex.test(x) 
+		X Regex: <input id="regex_x"><br/>
+                Y Regex: <input id="regex_y"><br/>
+		Check: regex_x.test(x) 
 		<select id="operator">
 			<option value="&&">AND</option>
 			<option value="||">OR</option>
 			<option value="^">XOR</option>
 		</select>
-		 regex.test(y)<br/><br/>
+		 regex_y.test(y)<br/><br/>
 		<button id="submit"  onclick="javascript:drawFrac()">Generate image</button><br/>
 		<a href="javascript:getperma()">Get permalink</a>
 		
@@ -52,14 +53,16 @@
 			}
 		
 			function getperma() {
-				var lcode = document.getElementById("regex").value;
+				var lcode = document.getElementById("regex_x").value;
 				var link = location.protocol + '//' + location.host + location.pathname + "?re=" + encode(lcode);
 			
 				window.open(link);
 			}
 			
 			function drawFrac() {
-				var regex = new RegExp(document.getElementById("regex").value);
+				var regex_x = new RegExp(document.getElementById("regex_x").value);
+                                var regex_y = new RegExp(document.getElementById("regex_y").value);
+
 				var c = document.getElementById("canvas");
 				var ctx = c.getContext("2d");
 				
@@ -71,7 +74,7 @@
 				for (var x = 0; x < 200; x++) {
 					for (var y = 0; y < 200; y++) {
 						
-						if (eval("regex.test(x.toString())" + operator + "regex.test(y.toString())")) {
+						if (eval("regex_x.test(x.toString())" + operator + "regex_y.test(y.toString())")) {
 							ctx.fillStyle=matchcol;
 						} else {
 							ctx.fillStyle=nmatchcol;
@@ -88,7 +91,7 @@
 			var data = getURLParameter("re");
 		
 			if (data !== null) {
-				document.getElementById("regex").value = decode(data);
+				document.getElementById("regex_x").value = decode(data);
 			}
 		</script>
 	</body>
